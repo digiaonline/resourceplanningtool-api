@@ -1,7 +1,7 @@
 package main
 
 import (
-	"skillz/modules"
+	"resourceplanningtool-api/modules"
 	"encoding/json"
 	"io/ioutil"
 	"log"
