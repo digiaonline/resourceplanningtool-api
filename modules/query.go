@@ -1,0 +1,30 @@
+package modules
+
+import (
+	"strconv"
+
+	"github.com/graphql-go/graphql"
+)
+
+var QueryType = graphql.NewObject(graphql.ObjectConfig{
+	Name:	"Query",
+	Fields:	graphql.Fields{
+		"project": &graphql.Field{
+			Type:	ProjectType,
+			Args:	graphql.FieldConfigArgument{
+				"id":	&graphql.ArgumentConfig{
+					Description:	"Project ID",
+					Type:		graphql.NewNonNull(graphql.ID),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				i := p.Args["id"].(string)
+				id, err := strconv.Atoi(i)
+				if err != nil {
+					return nil, err
+				}
+				return GetProjectByID(id)
+			},
+		},
+	},
+})
