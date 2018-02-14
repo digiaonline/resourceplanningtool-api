@@ -5,8 +5,11 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"fmt"
+	"os"
 	"net/http"
 
+	"github.com/joho/godotenv"
 	"github.com/graphql-go/graphql"
 	_ "github.com/lib/pq"
 )
@@ -29,6 +32,11 @@ func handler(schema graphql.Schema) http.HandlerFunc {
 }
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Print("Error loading .env file")
+		log.Fatal(err)
+	}
 	schema, err := graphql.NewSchema(graphql.SchemaConfig{
 		Query:		modules.QueryType,
 		Mutation:	modules.MutationType,
@@ -38,7 +46,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	modules.InitDB("postgres", "postgres://dbuser:DBpassword@localhost/resourcedatabase")
+	var dbinfo string
+	dbinfo = fmt.Sprintf("postgres://%s:%s@%s", os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_ADDRESS"))
+	modules.InitDB("postgres", dbinfo)
 
 	http.Handle("/skillz", handler(schema))
 	log.Fatal(http.ListenAndServe(":3002", nil))
