@@ -22,7 +22,7 @@ func InsertCompany(company *Company) error {
 
 func GetCompanyByID(id int) (*Company, error) {
 	var name, url, industry string
-	err := db.QueryRow(`SELECT name FROM company where id=$1`, id).Scan(&name, &url, &industry)
+	err := db.QueryRow(`SELECT name, url, industry FROM company where id=$1`, id).Scan(&name, &url, &industry)
 	if err != nil {
 		return nil, err
 	}
