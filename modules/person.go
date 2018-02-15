@@ -49,7 +49,7 @@ func RemoveHasSkillByID(id int) error {
 	return err
 }
 
-func GetUsersSkillsByID(id int) ([]*Skill, error) {
+func GetPersonsSkillsByID(id int) ([]*Skill, error) {
 	rows, err := db.Query(`SELECT sk.id, sk.name, sk.level
 			       FROM skill AS sk, hasskill AS hskill
 			       WHERE hskill.person_id=$1`, id)

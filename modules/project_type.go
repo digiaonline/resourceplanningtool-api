@@ -38,11 +38,11 @@ var ProjectType = graphql.NewObject(graphql.ObjectConfig{
 })
 
 func init() {
-	ProjectType.AddFieldConfig("company", &graphql.Field{
-		Type: CompanyType,
+	ProjectType.AddFieldConfig("project", &graphql.Field{
+		Type: ProjectType,
 		Args: graphql.FieldConfigArgument{
 			"id": &graphql.ArgumentConfig{
-				Description: "Company ID",
+				Description: "Project ID",
 				Type:	     graphql.NewNonNull(graphql.ID),
 			},
 		},
