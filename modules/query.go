@@ -60,5 +60,22 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				return GetSkillByID(id)
 			},
 		},
+		"company": &graphql.Field{
+			Type:	CompanyType,
+			Args:	graphql.FieldConfigArgument{
+				"id":	&graphql.ArgumentConfig{
+					Description:	"Company ID",
+					Type:		graphql.NewNonNull(graphql.ID),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				i := p.Args["id"].(string)
+				id, err := strconv.Atoi(i)
+				if err != nil {
+					return nil, err
+				}
+				return GetCompanyByID(id)
+			},
+		},
 	},
 })
