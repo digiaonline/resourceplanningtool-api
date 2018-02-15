@@ -21,7 +21,7 @@ func InsertProject(project *Project) error {
 
 func GetProjectByID(id int) (*Project, error) {
 	var name, description string
-	err := db.QueryRow(`SELECT name FROM project where id=$1`, id).Scan(&name, &description)
+	err := db.QueryRow(`SELECT name, description FROM project where id=$1`, id).Scan(&name, &description)
 	if err != nil {
 		return nil, err
 	}
