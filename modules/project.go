@@ -72,6 +72,7 @@ func GetUsersInProjectByID(id int) ([]*Person, error) {
 	}
 	return persons, nil
 }
+
 func GetProjectsCompanyByID(id int) (*Company, error) {
 	var company_id int
 	var name, url, industry string
@@ -90,4 +91,27 @@ func GetProjectsCompanyByID(id int) (*Company, error) {
 		Industry:	industry,
 	}, nil
 
+}
+
+func GetProjectsList() ([]*Project, error) {
+	rows, err := db.Query(`SELECT * FROM project`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var (
+		projects	= []*Project{}
+		project_id	int
+		name		string
+		description	string
+	)
+
+	for rows.Next() {
+		if err = rows.Scan(&project_id, &name, &description); err != nil {
+			return nil, err
+		}
+		projects = append(projects, &Project{ID: project_id, Name: name, Description: description})
+	}
+	return projects, nil
 }

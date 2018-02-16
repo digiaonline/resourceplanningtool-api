@@ -26,6 +26,12 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				return GetProjectByID(id)
 			},
 		},
+		"list_projects": &graphql.Field{
+			Type:	graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(ProjectType))),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				return GetProjectsList()
+			},
+		},
 		"person": &graphql.Field{
 			Type:	PersonType,
 			Args:	graphql.FieldConfigArgument{
