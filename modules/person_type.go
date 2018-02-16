@@ -62,4 +62,13 @@ func init() {
 			return nil, nil
 		},
 	})
+	PersonType.AddFieldConfig("skills", &graphql.Field{
+		Type: graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(SkillType))),
+		Resolve: func(p graphql.ResolveParams) (interface {}, error) {
+			if person, ok := p.Source.(*Person); ok == true {
+				return GetPersonsSkillsByID(person.ID)
+			}
+			return []Skill{}, nil
+		},
+	})
 }
