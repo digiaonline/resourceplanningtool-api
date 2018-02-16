@@ -71,3 +71,27 @@ func GetPersonsSkillsByID(id int) ([]*Skill, error) {
 	}
 	return skills, nil
 }
+
+func GetPersonsList() ([]*Person, error) {
+	rows, err := db.Query(`SELECT * FROM person`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var (
+		persons		= []*Person{}
+		person_id	int
+		name		string
+		email		string
+		description	string
+	)
+
+	for rows.Next() {
+		if err = rows.Scan(&person_id, &name, &email, &description); err != nil {
+			return nil, err
+		}
+		persons = append(persons, &Person{ID: person_id, Name: name, Email: email, Description: description})
+	}
+	return persons, nil
+}
