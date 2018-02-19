@@ -72,6 +72,12 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				return GetSkillByID(id)
 			},
 		},
+		"list_skills": &graphql.Field{
+			Type:	graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(SkillType))),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				return GetSkillsList()
+			},
+		},
 		"company": &graphql.Field{
 			Type:	CompanyType,
 			Args:	graphql.FieldConfigArgument{

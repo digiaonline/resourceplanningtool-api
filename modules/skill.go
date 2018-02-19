@@ -36,3 +36,21 @@ func RemoveSkillByID(id int) error {
 	_, err := db.Exec(`DELETE FROM skill WHERE id=$1`, id)
 	return err
 }
+
+func GetSkillsList() ([]*Skill, error) {
+	rows, err := db.Queryx(`SELECT * FROM skill`)
+	if err != nil {
+		return nil, err
+	}
+
+	var skills = []*Skill{}
+
+	for rows.Next() {
+		skill := Skill{}
+		if err = rows.StructScan(&skill); err != nil {
+			return nil, err
+		}
+		skills = append(skills, &skill)
+	}
+	return skills, nil
+}
