@@ -73,25 +73,20 @@ func GetPersonsSkillsByID(id int) ([]*Skill, error) {
 }
 
 func GetPersonsList() ([]*Person, error) {
-	rows, err := db.Query(`SELECT * FROM person`)
+	rows, err := db.Queryx(`SELECT * FROM person`)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var (
-		persons		= []*Person{}
-		person_id	int
-		name		string
-		email		string
-		description	string
-	)
+	var persons = []*Person{}
 
 	for rows.Next() {
-		if err = rows.Scan(&person_id, &name, &email, &description); err != nil {
+		person := Person{}
+		if err = rows.StructScan(&person); err != nil {
 			return nil, err
 		}
-		persons = append(persons, &Person{ID: person_id, Name: name, Email: email, Description: description})
+		persons = append(persons, &person)
 	}
 	return persons, nil
 }

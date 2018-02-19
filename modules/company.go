@@ -40,48 +40,40 @@ func RemoveCompanyByID(id int) error {
 }
 
 func GetProjectsOfCompanyByID(id int) ([]*Project, error) {
-	rows, err := db.Query(`SELECT proj.id, proj.name, proj.description
+	rows, err := db.Queryx(`SELECT proj.id, proj.name, proj.description
 			       FROM project AS proj, projectscompany AS pc
 			       WHERE proj.id = pc.project_id
 			       AND pc.company_id=$1`, id)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
-	var (
-		projects	= []*Project{}
-		project_id	int
-		name		string
-		description	string
-	)
+
+	var projects = []*Project{}
+
 	for rows.Next() {
-		if err = rows.Scan(&project_id, &name, &description); err != nil {
+		project := Project{}
+		if err = rows.StructScan(&project); err != nil {
 			return nil, err
 		}
-		projects = append(projects, &Project{ID: project_id, Name: name, Description: description})
+		projects = append(projects, &project)
 	}
 	return projects, nil
 }
 
 func GetCompaniesList() ([]*Company, error) {
-	rows, err := db.Query(`SELECT * FROM company`)
+	rows, err := db.Queryx(`SELECT * FROM company`)
 	if err != nil {
 		return nil, err
 	}
 
-	var (
-		companies	= []*Company{}
-		company_id	int
-		name		string
-		url		string
-		industry	string
-	)
+	var companies = []*Company{}
 
 	for rows.Next() {
-		if err = rows.Scan(&company_id, &name, &url, &industry); err != nil {
+		company := Company{}
+		if err = rows.StructScan(&company); err != nil {
 			return nil, err
 		}
-		companies = append(companies, &Company{ID: company_id, Name: name, URL: url, Industry: industry})
+		companies = append(companies, &company)
 	}
 	return companies, nil
 }

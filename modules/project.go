@@ -94,24 +94,19 @@ func GetProjectsCompanyByID(id int) (*Company, error) {
 }
 
 func GetProjectsList() ([]*Project, error) {
-	rows, err := db.Query(`SELECT * FROM project`)
+	rows, err := db.Queryx(`SELECT * FROM project`)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
-	var (
-		projects	= []*Project{}
-		project_id	int
-		name		string
-		description	string
-	)
+	var projects = []*Project{}
 
 	for rows.Next() {
-		if err = rows.Scan(&project_id, &name, &description); err != nil {
+		project := Project{}
+		if err = rows.StructScan(&project); err != nil {
 			return nil, err
 		}
-		projects = append(projects, &Project{ID: project_id, Name: name, Description: description})
+		projects = append(projects, &project)
 	}
 	return projects, nil
 }

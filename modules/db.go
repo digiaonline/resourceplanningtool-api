@@ -3,15 +3,15 @@ package modules
 import (
 	"log"
 
-	"database/sql"
 	_ "github.com/lib/pq"
+	"github.com/jmoiron/sqlx"
 )
 
-var db *sql.DB
+var db *sqlx.DB
 
 func InitDB(dbtype string, dbaddress string) {
 	var err error
-	db, err = sql.Open(dbtype, dbaddress)
+	db, err = sqlx.Connect(dbtype, dbaddress)
 	if err != nil {
 		log.Panic(err)
 	}
