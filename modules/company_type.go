@@ -62,4 +62,13 @@ func init() {
 			return nil, nil
 		},
 	})
+	CompanyType.AddFieldConfig("projects", &graphql.Field{
+		Type: graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(ProjectType))),
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			if company, ok := p.Source.(*Company); ok == true {
+				return GetProjectsOfCompanyByID(company.ID)
+			}
+			return []Project{}, nil
+		},
+	})
 }

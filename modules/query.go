@@ -89,5 +89,11 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				return GetCompanyByID(id)
 			},
 		},
+		"list_companies": &graphql.Field{
+			Type:	graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(CompanyType))),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				return GetCompaniesList()
+			},
+		},
 	},
 })

@@ -62,3 +62,26 @@ func GetProjectsOfCompanyByID(id int) ([]*Project, error) {
 	}
 	return projects, nil
 }
+
+func GetCompaniesList() ([]*Company, error) {
+	rows, err := db.Query(`SELECT * FROM company`)
+	if err != nil {
+		return nil, err
+	}
+
+	var (
+		companies	= []*Company{}
+		company_id	int
+		name		string
+		url		string
+		industry	string
+	)
+
+	for rows.Next() {
+		if err = rows.Scan(&company_id, &name, &url, &industry); err != nil {
+			return nil, err
+		}
+		companies = append(companies, &Company{ID: company_id, Name: name, URL: url, Industry: industry})
+	}
+	return companies, nil
+}
