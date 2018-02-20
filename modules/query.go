@@ -78,11 +78,11 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				return GetSkillsList()
 			},
 		},
-		"company": &graphql.Field{
-			Type:	CompanyType,
+		"customer": &graphql.Field{
+			Type:	CustomerType,
 			Args:	graphql.FieldConfigArgument{
 				"id":	&graphql.ArgumentConfig{
-					Description:	"Company ID",
+					Description:	"Customer ID",
 					Type:		graphql.NewNonNull(graphql.ID),
 				},
 			},
@@ -92,13 +92,13 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				if err != nil {
 					return nil, err
 				}
-				return GetCompanyByID(id)
+				return GetCustomerByID(id)
 			},
 		},
-		"list_companies": &graphql.Field{
-			Type:	graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(CompanyType))),
+		"list_customers": &graphql.Field{
+			Type:	graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(CustomerType))),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				return GetCompaniesList()
+				return GetCustomersList()
 			},
 		},
 	},

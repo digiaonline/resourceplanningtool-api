@@ -4,14 +4,14 @@ import (
 	"github.com/graphql-go/graphql"
 )
 
-var CompanyType = graphql.NewObject(graphql.ObjectConfig{
-	Name: "Company",
+var CustomerType = graphql.NewObject(graphql.ObjectConfig{
+	Name: "Customer",
 	Fields: graphql.Fields{
 		"id": &graphql.Field{
 			Type: graphql.NewNonNull(graphql.ID),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				if company, ok := p.Source.(*Company); ok == true {
-					return company.ID, nil
+				if customer, ok := p.Source.(*Customer); ok == true {
+					return customer.ID, nil
 				}
 				return nil, nil
 			},
@@ -19,8 +19,8 @@ var CompanyType = graphql.NewObject(graphql.ObjectConfig{
 		"name": &graphql.Field{
 			Type: graphql.NewNonNull(graphql.String),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				if company, ok := p.Source.(*Company); ok == true {
-					return company.Name, nil
+				if customer, ok := p.Source.(*Customer); ok == true {
+					return customer.Name, nil
 				}
 				return nil, nil
 			},
@@ -28,8 +28,8 @@ var CompanyType = graphql.NewObject(graphql.ObjectConfig{
 		"url": &graphql.Field{
 			Type: graphql.NewNonNull(graphql.String),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				if company, ok := p.Source.(*Company); ok == true {
-					return company.URL, nil
+				if customer, ok := p.Source.(*Customer); ok == true {
+					return customer.URL, nil
 				}
 				return nil, nil
 			},
@@ -37,8 +37,8 @@ var CompanyType = graphql.NewObject(graphql.ObjectConfig{
 		"industry": &graphql.Field{
 			Type: graphql.NewNonNull(graphql.String),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				if company, ok := p.Source.(*Company); ok == true {
-					return company.Industry, nil
+				if customer, ok := p.Source.(*Customer); ok == true {
+					return customer.Industry, nil
 				}
 				return nil, nil
 			},
@@ -47,26 +47,26 @@ var CompanyType = graphql.NewObject(graphql.ObjectConfig{
 })
 
 func init() {
-	CompanyType.AddFieldConfig("company", &graphql.Field{
-		Type: CompanyType,
+	CustomerType.AddFieldConfig("customer", &graphql.Field{
+		Type: CustomerType,
 		Args: graphql.FieldConfigArgument{
 			"id": &graphql.ArgumentConfig{
-				Description: "Company ID",
+				Description: "Customer ID",
 				Type:	     graphql.NewNonNull(graphql.ID),
 			},
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			if company, ok := p.Source.(*Company); ok == true {
-				return GetProjectsOfCompanyByID(company.ID)
+			if customer, ok := p.Source.(*Customer); ok == true {
+				return GetProjectsOfCustomerByID(customer.ID)
 			}
 			return nil, nil
 		},
 	})
-	CompanyType.AddFieldConfig("projects", &graphql.Field{
+	CustomerType.AddFieldConfig("projects", &graphql.Field{
 		Type: graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(ProjectType))),
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			if company, ok := p.Source.(*Company); ok == true {
-				return GetProjectsOfCompanyByID(company.ID)
+			if customer, ok := p.Source.(*Customer); ok == true {
+				return GetProjectsOfCustomerByID(customer.ID)
 			}
 			return []Project{}, nil
 		},

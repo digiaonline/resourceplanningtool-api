@@ -48,7 +48,7 @@ func init() {
 		},
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 			if project, ok := p.Source.(*Project); ok == true {
-				return GetProjectsCompanyByID(project.ID)
+				return GetProjectsCustomerByID(project.ID)
 			}
 			return nil, nil
 		},

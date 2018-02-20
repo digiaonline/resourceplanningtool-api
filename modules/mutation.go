@@ -50,19 +50,19 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				return (err == nil), err
 			},
 		},
-		"createCompany": &graphql.Field{
-			Type: CompanyType,
+		"createCustomer": &graphql.Field{
+			Type: CustomerType,
 			Args: graphql.FieldConfigArgument{
 				"name": &graphql.ArgumentConfig{
-					Description: "New company name",
+					Description: "New customer name",
 					Type:        graphql.NewNonNull(graphql.String),
 				},
 				"url": &graphql.ArgumentConfig{
-					Description: "New company URL",
+					Description: "New customer URL",
 					Type:        graphql.NewNonNull(graphql.String),
 				},
 				"industry": &graphql.ArgumentConfig{
-					Description: "New company industry",
+					Description: "New customer industry",
 					Type:        graphql.NewNonNull(graphql.String),
 				},
 			},
@@ -70,20 +70,20 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				name := p.Args["name"].(string)
 				url := p.Args["url"].(string)
 				industry := p.Args["industry"].(string)
-				company := &Company{
+				customer := &Customer{
 					Name: name,
 					URL: url,
 					Industry: industry,
 				}
-				err := InsertCompany(company)
-				return company, err
+				err := InsertCustomer(customer)
+				return customer, err
 			},
 		},
-		"removeCompany": &graphql.Field{
+		"removeCustomer": &graphql.Field{
 			Type: graphql.Boolean,
 			Args: graphql.FieldConfigArgument{
 				"id": &graphql.ArgumentConfig{
-					Description: "Company ID to remove",
+					Description: "Customer ID to remove",
 					Type:        graphql.NewNonNull(graphql.ID),
 				},
 			},
@@ -93,7 +93,7 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				if err != nil {
 					return nil, err
 				}
-				err = RemoveCompanyByID(id)
+				err = RemoveCustomerByID(id)
 				return (err == nil), err
 			},
 		},

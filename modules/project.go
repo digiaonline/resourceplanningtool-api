@@ -73,24 +73,17 @@ func GetUsersInProjectByID(id int) ([]*Person, error) {
 	return persons, nil
 }
 
-func GetProjectsCompanyByID(id int) (*Company, error) {
-	var company_id int
-	var name, url, industry string
-	err := db.QueryRow(`SELECT comp.id, comp.name, comp.url, comp.industry
-			    FROM projectscompany as pc, company as comp
-			    WHERE projectscompany.project_id=$1
-			    AND company.id=projectscompany.company_id
-			    LIMIT 1`, id).Scan(&company_id, &name, &url, &industry)
+func GetProjectsCustomerByID(id int) (*Customer, error) {
+	customer := Customer{}
+	err := db.QueryRowx(`SELECT cust.id, cust.name, cust.url, cust.industry
+			     FROM projectscustomer as pc, customer as cust
+			     WHERE projectscustomer.project_id=$1
+			     AND customer.id=projectscustomer.customer_id
+			     LIMIT 1`, id).StructScan(&customer)
 	if err != nil {
 		return nil, err
 	}
-	return &Company{
-		ID:		company_id,
-		Name:		name,
-		URL:		url,
-		Industry:	industry,
-	}, nil
-
+	return &customer, nil
 }
 
 func GetProjectsList() ([]*Project, error) {
