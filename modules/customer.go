@@ -23,7 +23,7 @@ func InsertCustomer(customer *Customer) error {
 func GetCustomerByID(id int) (*Customer, error) {
 	customer := Customer{}
 	customer.ID = id
-	err := db.QueryRowx(`SELECT name, url, industry FROM customer where id=$1`, id).Scan(&customer)
+	err := db.QueryRowx(`SELECT name, url, industry FROM customer where id=$1`, id).StructScan(&customer)
 	if err != nil {
 		return nil, err
 	}

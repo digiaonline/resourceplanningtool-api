@@ -34,11 +34,65 @@ var PersonType = graphql.NewObject(graphql.ObjectConfig{
 				return nil, nil
 			},
 		},
+		"title": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.String),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if person, ok := p.Source.(*Person); ok == true {
+					return person.Title, nil
+				}
+				return nil, nil
+			},
+		},
 		"description": &graphql.Field{
 			Type: graphql.NewNonNull(graphql.String),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				if person, ok := p.Source.(*Person); ok == true {
 					return person.Description, nil
+				}
+				return nil, nil
+			},
+		},
+		"location": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.String),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if person, ok := p.Source.(*Person); ok == true {
+					return person.Location, nil
+				}
+				return nil, nil
+			},
+		},
+		"picture": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.String),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if person, ok := p.Source.(*Person); ok == true {
+					return person.Picture, nil
+				}
+				return nil, nil
+			},
+		},
+		"githuburl": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.String),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if person, ok := p.Source.(*Person); ok == true {
+					return person.GithubURL, nil
+				}
+				return nil, nil
+			},
+		},
+		"linkedinurl": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.String),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if person, ok := p.Source.(*Person); ok == true {
+					return person.LinkedInURL, nil
+				}
+				return nil, nil
+			},
+		},
+		"startdate": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.Int),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if person, ok := p.Source.(*Person); ok == true {
+					return person.StartDate, nil
 				}
 				return nil, nil
 			},

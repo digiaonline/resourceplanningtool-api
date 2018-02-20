@@ -1,19 +1,31 @@
 package modules
 
+import "log"
+
 type Person struct {
 	ID		int
 	Name		string
 	Email		string
+	Title		string
 	Description	string
+	Location	string
+	Picture		string
+	GithubURL	string
+	LinkedInURL	string
+	StartDate	int
 }
 
 func InsertPerson(person *Person) error {
 	var id int
-	err := db.QueryRow(`INSERT INTO person (name, email, description)
-			    VALUES ($1, $2, $3)
+	err := db.QueryRow(`INSERT INTO person (name, email, title, description, location,
+			    picture, githuburl, linkedinurl, startdate)
+			    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 			    RETURNING id`,
-			    person.Name, person.Email, person.Description).Scan(&id)
+			    person.Name, person.Email, person.Title, person.Description,
+			    person.Location, person.Picture, person.GithubURL,
+			    person.LinkedInURL, person.StartDate).Scan(&id)
 	if err != nil {
+		log.Print(err)
 		return err
 	}
 	person.ID = id
@@ -21,17 +33,13 @@ func InsertPerson(person *Person) error {
 }
 
 func GetPersonByID(id int) (*Person, error) {
-	var name, email, description string
-	err := db.QueryRow(`SELECT name, email, description FROM person where id=$1`, id).Scan(&name, &email, &description)
+	person := Person{}
+	person.ID = id
+	err := db.QueryRowx(`SELECT* FROM person where id=$1 LIMIT 1`, id).StructScan(&person)
 	if err != nil {
 		return nil, err
 	}
-	return &Person{
-		ID:		id,
-		Name:		name,
-		Email:		email,
-		Description:	description,
-	}, nil
+	return &person, nil
 }
 
 func RemovePersonByID(id int) error {
@@ -50,24 +58,21 @@ func RemoveHasSkillByID(id int) error {
 }
 
 func GetPersonsSkillsByID(id int) ([]*Skill, error) {
-	rows, err := db.Query(`SELECT sk.id, sk.name, sk.level
-			       FROM skill AS sk, hasskill AS hskill
-			       WHERE hskill.person_id=$1`, id)
+	rows, err := db.Queryx(`SELECT sk.id, sk.name, sk.level
+			        FROM skill AS sk, hasskill AS hskill
+			        WHERE hskill.person_id=$1`, id)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
-	var (
-		skills		= []*Skill{}
-		skill_id	int
-		name		string
-		skill_level	int
-	)
+
+	var skills = []*Skill{}
+
 	for rows.Next() {
-		if err = rows.Scan(&skill_id, &name, &skill_level); err != nil {
+		skill := Skill{}
+		if err = rows.StructScan(&skill); err != nil {
 			return nil, err
 		}
-		skills = append(skills, &Skill{ID: skill_id, Name: name, Level: skill_level})
+		skills = append(skills, &skill)
 	}
 	return skills, nil
 }
