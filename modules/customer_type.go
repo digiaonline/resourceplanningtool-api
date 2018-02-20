@@ -43,6 +43,15 @@ var CustomerType = graphql.NewObject(graphql.ObjectConfig{
 				return nil, nil
 			},
 		},
+		"logo": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.String),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if customer, ok := p.Source.(*Customer); ok == true {
+					return customer.Logo, nil
+				}
+				return nil, nil
+			},
+		},
 	},
 })
 

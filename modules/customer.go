@@ -5,14 +5,15 @@ type Customer struct {
 	Name		string
 	URL		string
 	Industry	string
+	Logo		string
 }
 
 func InsertCustomer(customer *Customer) error {
 	var id int
-	err := db.QueryRow(`INSERT INTO customer (name, url, industry)
-			    VALUES ($1, $2, $3)
+	err := db.QueryRow(`INSERT INTO customer (name, url, industry, logo)
+			    VALUES ($1, $2, $3, $4)
 			    RETURNING id`,
-			    customer.Name, customer.URL, customer.Industry).Scan(&id)
+			    customer.Name, customer.URL, customer.Industry, customer.Logo).Scan(&id)
 	if err != nil {
 		return err
 	}
@@ -22,8 +23,7 @@ func InsertCustomer(customer *Customer) error {
 
 func GetCustomerByID(id int) (*Customer, error) {
 	customer := Customer{}
-	customer.ID = id
-	err := db.QueryRowx(`SELECT name, url, industry FROM customer where id=$1`, id).StructScan(&customer)
+	err := db.QueryRowx(`SELECT * FROM customer where id=$1 LIMIT 1`, id).StructScan(&customer)
 	if err != nil {
 		return nil, err
 	}
