@@ -1,7 +1,5 @@
 package modules
 
-import "log"
-
 type Person struct {
 	ID		int
 	Name		string
@@ -25,7 +23,6 @@ func InsertPerson(person *Person) error {
 			    person.Location, person.Picture, person.GithubURL,
 			    person.LinkedInURL, person.StartDate).Scan(&id)
 	if err != nil {
-		log.Print(err)
 		return err
 	}
 	person.ID = id
@@ -82,7 +79,6 @@ func GetPersonsList() ([]*Person, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	var persons = []*Person{}
 
