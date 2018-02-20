@@ -34,6 +34,15 @@ var ProjectType = graphql.NewObject(graphql.ObjectConfig{
 				return nil, nil
 			},
 		},
+		"picture": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.String),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if project, ok := p.Source.(*Project); ok == true {
+					return project.Picture, nil
+				}
+				return nil, nil
+			},
+		},
 	},
 })
 
