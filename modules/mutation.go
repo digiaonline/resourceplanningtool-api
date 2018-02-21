@@ -13,11 +13,15 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 			Type: ProjectType,
 			Args: graphql.FieldConfigArgument{
 				"name": &graphql.ArgumentConfig{
-					Description: "New Project Name",
+					Description: "New project name",
 					Type:        graphql.NewNonNull(graphql.String),
 				},
 				"description": &graphql.ArgumentConfig{
-					Description: "New Project Description",
+					Description: "New project description",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"picture": &graphql.ArgumentConfig{
+					Description: "New project picture",
 					Type:        graphql.NewNonNull(graphql.String),
 				},
 			},
@@ -63,6 +67,10 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"industry": &graphql.ArgumentConfig{
 					Description: "New customer industry",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"logo": &graphql.ArgumentConfig{
+					Description: "New customer logo",
 					Type:        graphql.NewNonNull(graphql.String),
 				},
 			},
