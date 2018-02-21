@@ -317,5 +317,43 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				return (err == nil), err
 			},
 		},
+		"addTechnologyToProject": &graphql.Field{
+			Type: graphql.Boolean,
+			Args: graphql.FieldConfigArgument{
+				"project_id": &graphql.ArgumentConfig{
+					Description: "Project ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+				"technology_id": &graphql.ArgumentConfig{
+					Description: "Technology ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				project_id := p.Args["project_id"].(int)
+				technology_id := p.Args["technology_id"].(int)
+				err := AddTechnologyToProject(project_id, technology_id)
+				return (err == nil), err
+			},
+		},
+		"removeTechnologyFromProject": &graphql.Field{
+			Type: graphql.Boolean,
+			Args: graphql.FieldConfigArgument{
+				"project_id": &graphql.ArgumentConfig{
+					Description: "Project ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+				"technology_id": &graphql.ArgumentConfig{
+					Description: "Technology ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				project_id := p.Args["project_id"].(int)
+				technology_id := p.Args["technology_id"].(int)
+				err := RemoveTechnologyFromProject(project_id, technology_id)
+				return (err == nil), err
+			},
+		},
 	},
 })
