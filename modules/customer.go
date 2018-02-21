@@ -36,10 +36,10 @@ func RemoveCustomerByID(id int) error {
 }
 
 func GetProjectsOfCustomerByID(id int) ([]*Project, error) {
-	rows, err := db.Queryx(`SELECT proj.id, proj.name, proj.description
-			       FROM project AS proj, projectscustomer AS pc
-			       WHERE proj.id = pc.project_id
-			       AND pc.customer_id=$1`, id)
+	rows, err := db.Queryx(`SELECT proj.*
+			        FROM project AS proj, projectscustomer AS pc
+			        WHERE proj.id = pc.project_id
+			        AND pc.customer_id=$1`, id)
 	if err != nil {
 		return nil, err
 	}

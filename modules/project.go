@@ -51,7 +51,7 @@ func RemoveFromProject(project_id, person_id int) error {
 }
 
 func GetPersonsInProjectByID(id int) ([]*Person, error) {
-	rows, err := db.Queryx(`SELECT pers
+	rows, err := db.Queryx(`SELECT pers.*
 			        FROM person AS pers, worksinproject AS wproj
 			        WHERE pers.id = wproj.person_id
 			        AND wproj.project_id=$1`, id)
@@ -73,11 +73,10 @@ func GetPersonsInProjectByID(id int) ([]*Person, error) {
 
 func GetProjectsCustomerByID(id int) (*Customer, error) {
 	customer := Customer{}
-	err := db.QueryRowx(`SELECT cust
+	err := db.QueryRowx(`SELECT cust.*
 			     FROM projectscustomer as pc, customer as cust
-			     WHERE projectscustomer.project_id=$1
-			     AND customer.id=projectscustomer.customer_id
-			     LIMIT 1`, id).StructScan(&customer)
+			     WHERE pc.project_id=$1
+			     AND cust.id=pc.customer_id`, id).StructScan(&customer)
 	if err != nil {
 		return nil, err
 	}

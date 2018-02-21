@@ -55,7 +55,7 @@ func RemoveHasSkillByID(id int) error {
 }
 
 func GetPersonsSkillsByID(id int) ([]*Skill, error) {
-	rows, err := db.Queryx(`SELECT sk.id, sk.name, sk.level
+	rows, err := db.Queryx(`SELECT sk.*
 			        FROM skill AS sk, hasskill AS hskill
 			        WHERE hskill.person_id=$1`, id)
 	if err != nil {
