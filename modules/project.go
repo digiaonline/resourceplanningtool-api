@@ -1,18 +1,24 @@
 package modules
 
 type Project struct {
-	ID		int
-	Name		string
-	Description	string
-	Picture		string
+	ID			int
+	Name			string
+	ShortDescription	string
+	Description		string
+	ContactEmail		string
+	Picture			string
+	Ongoing			bool
+	StartTime		int
+	EndTime			int
 }
 
 func InsertProject(project *Project) error {
 	var id int
-	err := db.QueryRow(`INSERT INTO project (name, description, picture)
-			    VALUES ($1, $2, $3)
+	err := db.QueryRow(`INSERT INTO project (name, shortdescription, description, contactemail,
+			    picture, ongoing, starttime, endtime)
+			    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 			    RETURNING id`,
-			    project.Name, project.Description, project.Picture).Scan(&id)
+			    project.Name, project.ShortDescription, project.Description, project.ContactEmail, project.Picture, project.Ongoing, project.StartTime, project.EndTime).Scan(&id)
 	if err != nil {
 		return err
 	}
@@ -44,11 +50,11 @@ func RemoveFromProject(project_id, person_id int) error {
 	return err
 }
 
-func GetUsersInProjectByID(id int) ([]*Person, error) {
+func GetPersonsInProjectByID(id int) ([]*Person, error) {
 	rows, err := db.Queryx(`SELECT pers
-			       FROM person AS pers, worksinproject AS wproj
-			       WHERE pers.id = wproje.person_id
-			       AND wproj.project_id=$1`, id)
+			        FROM person AS pers, worksinproject AS wproj
+			        WHERE pers.id = wproj.person_id
+			        AND wproj.project_id=$1`, id)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +73,7 @@ func GetUsersInProjectByID(id int) ([]*Person, error) {
 
 func GetProjectsCustomerByID(id int) (*Customer, error) {
 	customer := Customer{}
-	err := db.QueryRowx(`SELECT cust.id, cust.name, cust.url, cust.industry
+	err := db.QueryRowx(`SELECT cust
 			     FROM projectscustomer as pc, customer as cust
 			     WHERE projectscustomer.project_id=$1
 			     AND customer.id=projectscustomer.customer_id

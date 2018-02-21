@@ -25,6 +25,15 @@ var ProjectType = graphql.NewObject(graphql.ObjectConfig{
 				return nil, nil
 			},
 		},
+		"shortdescription": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.String),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if project, ok := p.Source.(*Project); ok == true {
+					return project.ShortDescription, nil
+				}
+				return nil, nil
+			},
+		},
 		"description": &graphql.Field{
 			Type: graphql.NewNonNull(graphql.String),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
@@ -34,11 +43,47 @@ var ProjectType = graphql.NewObject(graphql.ObjectConfig{
 				return nil, nil
 			},
 		},
+		"contactemail": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.String),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if project, ok := p.Source.(*Project); ok == true {
+					return project.ContactEmail, nil
+				}
+				return nil, nil
+			},
+		},
 		"picture": &graphql.Field{
 			Type: graphql.NewNonNull(graphql.String),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				if project, ok := p.Source.(*Project); ok == true {
 					return project.Picture, nil
+				}
+				return nil, nil
+			},
+		},
+		"ongoing": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.Boolean),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if project, ok := p.Source.(*Project); ok == true {
+					return project.Ongoing, nil
+				}
+				return nil, nil
+			},
+		},
+		"starttime": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.Int),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if project, ok := p.Source.(*Project); ok == true {
+					return project.StartTime, nil
+				}
+				return nil, nil
+			},
+		},
+		"endtime": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.Int),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if project, ok := p.Source.(*Project); ok == true {
+					return project.EndTime, nil
 				}
 				return nil, nil
 			},
@@ -58,6 +103,15 @@ func init() {
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 			if project, ok := p.Source.(*Project); ok == true {
 				return GetProjectsCustomerByID(project.ID)
+			}
+			return nil, nil
+		},
+	})
+	ProjectType.AddFieldConfig("persons", &graphql.Field{
+		Type: graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(PersonType))),
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			if project, ok := p.Source.(*Project); ok == true {
+				return GetPersonsInProjectByID(project.ID)
 			}
 			return nil, nil
 		},
