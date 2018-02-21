@@ -16,7 +16,15 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 					Description: "New project name",
 					Type:        graphql.NewNonNull(graphql.String),
 				},
+				"shortdescription": &graphql.ArgumentConfig{
+					Description: "New project short description",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
 				"description": &graphql.ArgumentConfig{
+					Description: "New project description",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"contactemail": &graphql.ArgumentConfig{
 					Description: "New project description",
 					Type:        graphql.NewNonNull(graphql.String),
 				},
@@ -24,13 +32,29 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 					Description: "New project picture",
 					Type:        graphql.NewNonNull(graphql.String),
 				},
+				"ongoing": &graphql.ArgumentConfig{
+					Description: "New project ongoing",
+					Type:        graphql.NewNonNull(graphql.Boolean),
+				},
+				"starttime": &graphql.ArgumentConfig{
+					Description: "New project starttime",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+				"endtime": &graphql.ArgumentConfig{
+					Description: "New project endtime",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				name := p.Args["name"].(string)
-				description := p.Args["description"].(string)
 				project := &Project{
-					Name: name,
-					Description: description,
+					Name: p.Args["name"].(string),
+					ShortDescription: p.Args["shortdescription"].(string),
+					Description: p.Args["description"].(string),
+					ContactEmail: p.Args["contactemail"].(string),
+					Picture: p.Args["picture"].(string),
+					Ongoing: p.Args["ongoing"].(bool),
+					StartTime: p.Args["starttime"].(int),
+					EndTime: p.Args["endtime"].(int),
 				}
 				err := InsertProject(project)
 				return project, err
@@ -75,13 +99,11 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				name := p.Args["name"].(string)
-				url := p.Args["url"].(string)
-				industry := p.Args["industry"].(string)
 				customer := &Customer{
-					Name: name,
-					URL: url,
-					Industry: industry,
+					Name: p.Args["name"].(string),
+					URL: p.Args["url"].(string),
+					Industry: p.Args["industry"].(string),
+					Logo: p.Args["logo"].(string),
 				}
 				err := InsertCustomer(customer)
 				return customer, err
@@ -102,6 +124,80 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 					return nil, err
 				}
 				err = RemoveCustomerByID(id)
+				return (err == nil), err
+			},
+		},
+		"createPerson": &graphql.Field{
+			Type: PersonType,
+			Args: graphql.FieldConfigArgument{
+				"name": &graphql.ArgumentConfig{
+					Description: "New person name",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"email": &graphql.ArgumentConfig{
+					Description: "New person email",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"title": &graphql.ArgumentConfig{
+					Description: "New person title",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"description": &graphql.ArgumentConfig{
+					Description: "New person description",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"location": &graphql.ArgumentConfig{
+					Description: "New person location",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"picture": &graphql.ArgumentConfig{
+					Description: "New person picture",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"githuburl": &graphql.ArgumentConfig{
+					Description: "New person GithubURL",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"linkedinurl": &graphql.ArgumentConfig{
+					Description: "New person LinkedInURL",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"startdate": &graphql.ArgumentConfig{
+					Description: "New person startdate",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				person := &Person{
+					Name: p.Args["name"].(string),
+					Email: p.Args["email"].(string),
+					Title: p.Args["title"].(string),
+					Description: p.Args["description"].(string),
+					Location: p.Args["location"].(string),
+					Picture: p.Args["picture"].(string),
+					GithubURL: p.Args["githuburl"].(string),
+					LinkedInURL: p.Args["linkedinurl"].(string),
+					StartDate: p.Args["startdate"].(int),
+				}
+				err := InsertPerson(person)
+				return person, err
+			},
+		},
+		"removePerson": &graphql.Field{
+			Type: graphql.Boolean,
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Description: "Person ID to remove",
+					Type:        graphql.NewNonNull(graphql.ID),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				i := p.Args["id"].(string)
+				id, err := strconv.Atoi(i)
+				if err != nil {
+					return nil, err
+				}
+				err = RemovePersonByID(id)
 				return (err == nil), err
 			},
 		},
