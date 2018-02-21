@@ -17,7 +17,7 @@ func InsertPerson(person *Person) error {
 	var id int
 	err := db.QueryRow(`INSERT INTO person (name, email, title, description, location,
 			    picture, githuburl, linkedinurl, startdate)
-			    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+			    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 			    RETURNING id`,
 			    person.Name, person.Email, person.Title, person.Description,
 			    person.Location, person.Picture, person.GithubURL,
