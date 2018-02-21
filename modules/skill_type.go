@@ -46,11 +46,5 @@ func init() {
 				Type:	     graphql.NewNonNull(graphql.ID),
 			},
 		},
-		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			if skill, ok := p.Source.(*Skill); ok == true {
-				return GetSkillByID(skill.ID)
-			}
-			return nil, nil
-		},
 	})
 }

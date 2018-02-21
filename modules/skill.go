@@ -19,17 +19,12 @@ func InsertSkill(skill *Skill) error {
 }
 
 func GetSkillByID(id int) (*Skill, error) {
-	var name string
-	var level int
-	err := db.QueryRow(`SELECT name, level FROM skill where id=$1`, id).Scan(&name, &level)
+	skill := Skill{}
+	err := db.QueryRowx(`SELECT * FROM skill where id=$1`, id).StructScan(&skill)
 	if err != nil {
 		return nil, err
 	}
-	return &Skill{
-		ID:	id,
-		Name:	name,
-		Level:	level,
-	}, nil
+	return &skill, nil
 }
 
 func RemoveSkillByID(id int) error {
