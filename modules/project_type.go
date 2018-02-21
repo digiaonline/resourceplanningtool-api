@@ -100,12 +100,6 @@ func init() {
 				Type:	     graphql.NewNonNull(graphql.ID),
 			},
 		},
-		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-			if project, ok := p.Source.(*Project); ok == true {
-				return GetProjectsCustomerByID(project.ID)
-			}
-			return nil, nil
-		},
 	})
 	ProjectType.AddFieldConfig("persons", &graphql.Field{
 		Type: graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(PersonType))),
