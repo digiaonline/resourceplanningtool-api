@@ -78,6 +78,29 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				return GetSkillsList()
 			},
 		},
+		"technology": &graphql.Field{
+			Type:	TechnologyType,
+			Args:	graphql.FieldConfigArgument{
+				"id":	&graphql.ArgumentConfig{
+					Description:	"Technology ID",
+					Type:		graphql.NewNonNull(graphql.ID),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				i := p.Args["id"].(string)
+				id, err := strconv.Atoi(i)
+				if err != nil {
+					return nil, err
+				}
+				return GetTechnologyByID(id)
+			},
+		},
+		"list_technologies": &graphql.Field{
+			Type:	graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(TechnologyType))),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				return GetTechnologiesList()
+			},
+		},
 		"customer": &graphql.Field{
 			Type:	CustomerType,
 			Args:	graphql.FieldConfigArgument{
