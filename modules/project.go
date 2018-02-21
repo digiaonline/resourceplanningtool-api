@@ -40,12 +40,12 @@ func RemoveProjectByID(id int) error {
 	return err
 }
 
-func AddToProject(project_id, person_id int) error {
+func AddPersonToProject(project_id, person_id int) error {
 	_, err := db.Exec(`INSERT INTO worksinproject (project_id, person_id) VALUES ($1, $2)`, project_id, person_id)
 	return err
 }
 
-func RemoveFromProject(project_id, person_id int) error {
+func RemovePersonFromProject(project_id, person_id int) error {
 	_, err := db.Exec(`DELETE FROM worksinproject WHERE project_id=$1 AND person_id=$2`, project_id, person_id)
 	return err
 }
@@ -81,6 +81,23 @@ func GetProjectsCustomerByID(id int) (*Customer, error) {
 		return nil, err
 	}
 	return &customer, nil
+}
+
+func GetTechnologiesInProjectByID(id int) ([]*Technology, error) {
+	technologies := []*Technology{}
+	rows, err := db.Queryx(`SELECT tech.*
+			       FROM usestechnology as usestech, technology as tech
+			       WHERE usestech.project_id=$1
+			       AND tech.id=usestech.technology_id`, id)
+
+	for rows.Next() {
+		technology := Technology{}
+		if err = rows.StructScan(&technology); err != nil {
+			return nil, err
+		}
+		technologies = append(technologies, &technology)
+	}
+	return technologies, nil
 }
 
 func GetProjectsList() ([]*Project, error) {

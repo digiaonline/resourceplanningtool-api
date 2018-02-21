@@ -110,6 +110,15 @@ func init() {
 			return nil, nil
 		},
 	})
+	ProjectType.AddFieldConfig("technologies", &graphql.Field{
+		Type: graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(TechnologyType))),
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			if project, ok := p.Source.(*Project); ok == true {
+				return GetTechnologiesInProjectByID(project.ID)
+			}
+			return nil, nil
+		},
+	})
 	ProjectType.AddFieldConfig("customer", &graphql.Field{
 		Type: CustomerType,
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
