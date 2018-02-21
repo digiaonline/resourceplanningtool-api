@@ -116,4 +116,13 @@ func init() {
 			return nil, nil
 		},
 	})
+	ProjectType.AddFieldConfig("customer", &graphql.Field{
+		Type: CustomerType,
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			if project, ok := p.Source.(*Project); ok == true {
+				return GetProjectsCustomerByID(project.ID)
+			}
+			return nil, nil
+		},
+	})
 }
