@@ -201,5 +201,83 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				return (err == nil), err
 			},
 		},
+		"createSkill": &graphql.Field{
+			Type: SkillType,
+			Args: graphql.FieldConfigArgument{
+				"name": &graphql.ArgumentConfig{
+					Description: "New skill name",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"level": &graphql.ArgumentConfig{
+					Description: "New skill level",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				skill := &Skill{
+					Name: p.Args["name"].(string),
+					Level: p.Args["level"].(int),
+				}
+				err := InsertSkill(skill)
+				return skill, err
+			},
+		},
+		"removeSkill": &graphql.Field{
+			Type: graphql.Boolean,
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Description: "Skill ID to remove",
+					Type:        graphql.NewNonNull(graphql.ID),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				i := p.Args["id"].(string)
+				id, err := strconv.Atoi(i)
+				if err != nil {
+					return nil, err
+				}
+				err = RemoveSkillByID(id)
+				return (err == nil), err
+			},
+		},
+		"createTechnology": &graphql.Field{
+			Type: TechnologyType,
+			Args: graphql.FieldConfigArgument{
+				"name": &graphql.ArgumentConfig{
+					Description: "New technology name",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"description": &graphql.ArgumentConfig{
+					Description: "New technology description",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				technology := &Technology{
+					Name: p.Args["name"].(string),
+					Description: p.Args["description"].(string),
+				}
+				err := InsertTechnology(technology)
+				return technology, err
+			},
+		},
+		"removeTechnology": &graphql.Field{
+			Type: graphql.Boolean,
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Description: "Technology ID to remove",
+					Type:        graphql.NewNonNull(graphql.ID),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				i := p.Args["id"].(string)
+				id, err := strconv.Atoi(i)
+				if err != nil {
+					return nil, err
+				}
+				err = RemoveTechnologyByID(id)
+				return (err == nil), err
+			},
+		},
 	},
 })
