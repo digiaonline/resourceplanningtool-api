@@ -50,6 +50,16 @@ func RemovePersonFromProject(project_id, person_id int) error {
 	return err
 }
 
+func AddTechnologyToProject(project_id, technology_id int) error {
+	_, err := db.Exec(`INSERT INTO usestechnology (project_id, technology_id) VALUES ($1, $2)`, project_id, technology_id)
+	return err
+}
+
+func RemoveTechnologyFromProject(project_id, technology_id int) error {
+	_, err := db.Exec(`DELETE FROM usestechnology WHERE project_id=$1 AND person_id=$2`, project_id, technology_id)
+	return err
+}
+
 func GetPersonsInProjectByID(id int) ([]*Person, error) {
 	rows, err := db.Queryx(`SELECT pers.*
 			        FROM person AS pers, worksinproject AS wproj
