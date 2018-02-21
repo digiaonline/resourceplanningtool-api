@@ -40,6 +40,14 @@ func RemoveProjectByID(id int) error {
 	return err
 }
 
+func UpdateProject(project *Project) error {
+	_, err := db.Exec(`UPDATE project SET name=$1, shortdescription=$2, description=$3, contactemail=$4,
+			   picture=$5, ongoing=$6, starttime=$7, endtime=$8 WHERE id=$9`, project.Name,
+			   project.ShortDescription, project.Description, project.ContactEmail, project.Picture,
+			   project.Ongoing, project.StartTime, project.EndTime, project.ID)
+	return err
+}
+
 func AddPersonToProject(project_id, person_id int) error {
 	_, err := db.Exec(`INSERT INTO worksinproject (project_id, person_id) VALUES ($1, $2)`, project_id, person_id)
 	return err
