@@ -26,7 +26,7 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				return GetProjectByID(id)
 			},
 		},
-		"list_projects": &graphql.Field{
+		"listProjects": &graphql.Field{
 			Type:	graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(ProjectType))),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				return GetProjectsList()
@@ -49,7 +49,7 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				return GetPersonByID(id)
 			},
 		},
-		"list_persons": &graphql.Field{
+		"listPersons": &graphql.Field{
 			Type:	graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(PersonType))),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				return GetPersonsList()
@@ -72,7 +72,7 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				return GetSkillByID(id)
 			},
 		},
-		"list_skills": &graphql.Field{
+		"listSkills": &graphql.Field{
 			Type:	graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(SkillType))),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				return GetSkillsList()
@@ -95,7 +95,7 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				return GetTechnologyByID(id)
 			},
 		},
-		"list_technologies": &graphql.Field{
+		"listTechnologies": &graphql.Field{
 			Type:	graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(TechnologyType))),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				return GetTechnologiesList()
@@ -118,7 +118,7 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				return GetCustomerByID(id)
 			},
 		},
-		"list_customers": &graphql.Field{
+		"listCustomers": &graphql.Field{
 			Type:	graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(CustomerType))),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				return GetCustomersList()
