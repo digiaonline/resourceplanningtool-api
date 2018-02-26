@@ -10,15 +10,17 @@ type Project struct {
 	Ongoing			bool
 	StartTime		int
 	EndTime			int
+	LiveAt			string
+	GithubURL		string
 }
 
 func InsertProject(project *Project) error {
 	var id int
 	err := db.QueryRow(`INSERT INTO project (name, shortdescription, description, contactemail,
 			    picture, ongoing, starttime, endtime)
-			    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+			    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 			    RETURNING id`,
-			    project.Name, project.ShortDescription, project.Description, project.ContactEmail, project.Picture, project.Ongoing, project.StartTime, project.EndTime).Scan(&id)
+			    project.Name, project.ShortDescription, project.Description, project.ContactEmail, project.Picture, project.Ongoing, project.StartTime, project.EndTime, project.LiveAt, project.GithubURL).Scan(&id)
 	if err != nil {
 		return err
 	}
@@ -42,9 +44,9 @@ func RemoveProjectByID(id int) error {
 
 func UpdateProject(project *Project) error {
 	_, err := db.Exec(`UPDATE project SET name=$1, shortdescription=$2, description=$3, contactemail=$4,
-			   picture=$5, ongoing=$6, starttime=$7, endtime=$8 WHERE id=$9`, project.Name,
+			   picture=$5, ongoing=$6, starttime=$7, endtime=$8, liveat=$9, githuburl=$10 WHERE id=$11`, project.Name,
 			   project.ShortDescription, project.Description, project.ContactEmail, project.Picture,
-			   project.Ongoing, project.StartTime, project.EndTime, project.ID)
+			   project.Ongoing, project.StartTime, project.EndTime, project.LiveAt, project.GithubURL, project.ID)
 	return err
 }
 

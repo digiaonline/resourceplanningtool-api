@@ -44,6 +44,14 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 					Description: "New project endtime",
 					Type:        graphql.NewNonNull(graphql.Int),
 				},
+				"liveat": &graphql.ArgumentConfig{
+					Description: "New project liveat URL",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"githuburl": &graphql.ArgumentConfig{
+					Description: "New project githuburl",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				project := &Project{
@@ -55,6 +63,8 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 					Ongoing: p.Args["ongoing"].(bool),
 					StartTime: p.Args["starttime"].(int),
 					EndTime: p.Args["endtime"].(int),
+					LiveAt: p.Args["liveat"].(string),
+					GithubURL: p.Args["githuburl"].(string),
 				}
 				err := InsertProject(project)
 				return project, err
@@ -117,6 +127,14 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 					Description: "New project endtime",
 					Type:        graphql.NewNonNull(graphql.Int),
 				},
+				"liveat": &graphql.ArgumentConfig{
+					Description: "New project liveat URL",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"githuburl": &graphql.ArgumentConfig{
+					Description: "New project githuburl",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				project := &Project{
@@ -129,6 +147,8 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 					Ongoing: p.Args["ongoing"].(bool),
 					StartTime: p.Args["starttime"].(int),
 					EndTime: p.Args["endtime"].(int),
+					LiveAt: p.Args["liveat"].(string),
+					GithubURL: p.Args["githuburl"].(string),
 				}
 				err := UpdateProject(project)
 				return (err == nil), err

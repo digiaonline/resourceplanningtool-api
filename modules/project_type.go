@@ -88,6 +88,24 @@ var ProjectType = graphql.NewObject(graphql.ObjectConfig{
 				return nil, nil
 			},
 		},
+		"liveat": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.String),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if project, ok := p.Source.(*Project); ok == true {
+					return project.LiveAt, nil
+				}
+				return nil, nil
+			},
+		},
+		"githuburl": &graphql.Field{
+			Type: graphql.NewNonNull(graphql.String),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				if project, ok := p.Source.(*Project); ok == true {
+					return project.GithubURL, nil
+				}
+				return nil, nil
+			},
+		},
 	},
 })
 
