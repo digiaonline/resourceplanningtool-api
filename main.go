@@ -9,10 +9,15 @@ import (
 	"os"
 	"net/http"
 
+	"github.com/rs/cors"
 	"github.com/joho/godotenv"
 	"github.com/graphql-go/graphql"
 	_ "github.com/lib/pq"
 )
+
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
 
 func handler(schema graphql.Schema) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -25,6 +30,7 @@ func handler(schema graphql.Schema) http.HandlerFunc {
 			Schema:		schema,
 			RequestString:	string(query),
 		})
+		enableCors(&w)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(result)
@@ -50,6 +56,8 @@ func main() {
 	dbinfo = fmt.Sprintf("postgres://%s:%s@%s", os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_ADDRESS"))
 	modules.InitDB("postgres", dbinfo)
 
-	http.Handle("/skillz", handler(schema))
-	log.Fatal(http.ListenAndServe(":3002", nil))
+	mux := http.NewServeMux()
+	mux.HandleFunc("/skillz", handler(schema))
+	handler := cors.Default().Handler(mux)
+	log.Fatal(http.ListenAndServe(":3002", handler))
 }
