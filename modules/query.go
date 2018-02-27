@@ -124,5 +124,28 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
 				return GetCustomersList()
 			},
 		},
+		"news": &graphql.Field{
+			Type:	NewsType,
+			Args:	graphql.FieldConfigArgument{
+				"id":	&graphql.ArgumentConfig{
+					Description:	"News ID",
+					Type:		graphql.NewNonNull(graphql.ID),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				i := p.Args["id"].(string)
+				id, err := strconv.Atoi(i)
+				if err != nil {
+					return nil, err
+				}
+				return GetNewsByID(id)
+			},
+		},
+		"listNews": &graphql.Field{
+			Type:	graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(NewsType))),
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				return GetNewsList()
+			},
+		},
 	},
 })
