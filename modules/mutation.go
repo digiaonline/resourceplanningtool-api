@@ -431,5 +431,44 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				return (err == nil), err
 			},
 		},
+		"createNews": &graphql.Field{
+			Type: NewsType,
+			Args: graphql.FieldConfigArgument{
+				"url": &graphql.ArgumentConfig{
+					Description: "News URL",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+				"description": &graphql.ArgumentConfig{
+					Description: "News description",
+					Type:        graphql.NewNonNull(graphql.String),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				news := &News{
+					URL: p.Args["url"].(string),
+					Description: p.Args["description"].(string),
+				}
+				err := InsertNews(news)
+				return news, err
+			},
+		},
+		"removeNews": &graphql.Field{
+			Type: graphql.Boolean,
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Description: "News ID to remove",
+					Type:        graphql.NewNonNull(graphql.ID),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				i := p.Args["id"].(string)
+				id, err := strconv.Atoi(i)
+				if err != nil {
+					return nil, err
+				}
+				err = RemoveNewsByID(id)
+				return (err == nil), err
+			},
+		},
 	},
 })
