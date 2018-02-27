@@ -137,6 +137,15 @@ func init() {
 			return nil, nil
 		},
 	})
+	ProjectType.AddFieldConfig("news", &graphql.Field{
+		Type: graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(NewsType))),
+		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+			if project, ok := p.Source.(*Project); ok == true {
+				return GetNewsInProjectByID(project.ID)
+			}
+			return nil, nil
+		},
+	})
 	ProjectType.AddFieldConfig("customer", &graphql.Field{
 		Type: CustomerType,
 		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
