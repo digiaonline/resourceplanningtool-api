@@ -120,6 +120,33 @@ func GetTechnologiesInProjectByID(id int) ([]*Technology, error) {
 	return technologies, nil
 }
 
+func AddNewsToProject(project_id, news_id int) error {
+	_, err := db.Exec(`INSERT INTO projectnews (project_id, news_id) VALUES ($1, $2)`, project_id, news_id)
+	return err
+}
+
+func RemoveNewsFromProject(project_id, news_id int) error {
+	_, err := db.Exec(`DELETE FROM projectnews WHERE project_id=$1 AND news_id=$2`, project_id, news_id)
+	return err
+}
+
+func GetNewsInProjectByID(id int) ([]*News, error) {
+	newsList := []*News{}
+	rows, err := db.Queryx(`SELECT news.*
+			       FROM projectnews as pn, news
+			       WHERE pn.project_id=$1
+			       AND news.id=pn.news_id`, id)
+
+	for rows.Next() {
+		news := News{}
+		if err = rows.StructScan(&news); err != nil {
+			return nil, err
+		}
+		newsList = append(newsList, &news)
+	}
+	return newsList, nil
+}
+
 func GetProjectsList() ([]*Project, error) {
 	rows, err := db.Queryx(`SELECT * FROM project`)
 	if err != nil {
