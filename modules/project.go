@@ -30,7 +30,7 @@ func InsertProject(project *Project) error {
 
 func GetProjectByID(id int) (*Project, error) {
 	project := Project{}
-	err := db.QueryRowx(`SELECT * FROM project where id=$1`, id).Scan(&project)
+	err := db.QueryRowx(`SELECT * FROM project where id=$1`, id).StructScan(&project)
 	if err != nil {
 		return nil, err
 	}
