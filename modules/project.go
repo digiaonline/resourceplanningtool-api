@@ -17,7 +17,7 @@ type Project struct {
 func InsertProject(project *Project) error {
 	var id int
 	err := db.QueryRow(`INSERT INTO project (name, shortdescription, description, contactemail,
-			    picture, ongoing, starttime, endtime)
+			    picture, ongoing, starttime, endtime, liveat, githuburl)
 			    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 			    RETURNING id`,
 			    project.Name, project.ShortDescription, project.Description, project.ContactEmail, project.Picture, project.Ongoing, project.StartTime, project.EndTime, project.LiveAt, project.GithubURL).Scan(&id)
