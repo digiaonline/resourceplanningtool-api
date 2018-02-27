@@ -470,5 +470,43 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				return (err == nil), err
 			},
 		},
+		"addNewsToProject": &graphql.Field{
+			Type: graphql.Boolean,
+			Args: graphql.FieldConfigArgument{
+				"project_id": &graphql.ArgumentConfig{
+					Description: "Project ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+				"news_id": &graphql.ArgumentConfig{
+					Description: "News ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				project_id := p.Args["project_id"].(int)
+				news_id := p.Args["news_id"].(int)
+				err := AddNewsToProject(project_id, news_id)
+				return (err == nil), err
+			},
+		},
+		"removeNewsFromProject": &graphql.Field{
+			Type: graphql.Boolean,
+			Args: graphql.FieldConfigArgument{
+				"project_id": &graphql.ArgumentConfig{
+					Description: "Project ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+				"news_id": &graphql.ArgumentConfig{
+					Description: "News ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				project_id := p.Args["project_id"].(int)
+				news_id := p.Args["news_id"].(int)
+				err := RemoveNewsFromProject(project_id, news_id)
+				return (err == nil), err
+			},
+		},
 	},
 })
