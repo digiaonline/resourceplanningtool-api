@@ -119,4 +119,13 @@ func init() {
 			return nil, nil
 		},
 	})
+	PersonType.AddFieldConfig("projects", &graphql.Field{
+		Type: graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(ProjectType))),
+		Resolve: func(p graphql.ResolveParams) (interface {}, error) {
+			if person, ok := p.Source.(*Person); ok == true {
+				return GetPersonsProjectsByID(person.ID)
+			}
+			return nil, nil
+		},
+	})
 }
