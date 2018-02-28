@@ -74,6 +74,27 @@ func GetPersonsSkillsByID(id int) ([]*Skill, error) {
 	return skills, nil
 }
 
+func GetPersonsProjectsByID(id int) ([]*Project, error) {
+	rows, err := db.Queryx(`SELECT proj.*
+			        FROM project AS proj, worksinproject AS wproj
+				WHERE proj.id = wproj.project_id
+				AND wproj.person_id = $1`, id)
+	if err != nil {
+		return nil, err
+	}
+
+	var projects = []*Project{}
+
+	for rows.Next() {
+		project := Project{}
+		if err = rows.StructScan(&project); err != nil {
+			return nil, err
+		}
+		projects = append(projects, &project)
+	}
+	return projects, nil
+}
+
 func GetPersonsList() ([]*Person, error) {
 	rows, err := db.Queryx(`SELECT * FROM person`)
 	if err != nil {
