@@ -96,61 +96,87 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 					Type:        graphql.NewNonNull(graphql.Int),
 				},
 				"name": &graphql.ArgumentConfig{
-					Description: "New project name",
-					Type:        graphql.NewNonNull(graphql.String),
+					Description:	"New project name",
+					Type:		graphql.String,
 				},
 				"shortdescription": &graphql.ArgumentConfig{
 					Description: "New project short description",
-					Type:        graphql.NewNonNull(graphql.String),
+					Type:        graphql.String,
 				},
 				"description": &graphql.ArgumentConfig{
-					Description: "New project description",
-					Type:        graphql.NewNonNull(graphql.String),
+					Description:	"New project description",
+					Type:		graphql.String,
 				},
 				"contactemail": &graphql.ArgumentConfig{
-					Description: "New project description",
-					Type:        graphql.NewNonNull(graphql.String),
+					Description:	"New project description",
+					Type:		graphql.String,
 				},
 				"picture": &graphql.ArgumentConfig{
-					Description: "New project picture",
-					Type:        graphql.NewNonNull(graphql.String),
+					Description:	"New project picture",
+					Type:		graphql.String,
 				},
 				"ongoing": &graphql.ArgumentConfig{
-					Description: "New project ongoing",
-					Type:        graphql.NewNonNull(graphql.Boolean),
+					Description:	"New project ongoing",
+					Type:		graphql.Boolean,
 				},
 				"starttime": &graphql.ArgumentConfig{
-					Description: "New project starttime",
-					Type:        graphql.NewNonNull(graphql.Int),
+					Description:	"New project starttime",
+					Type:		graphql.Int,
 				},
 				"endtime": &graphql.ArgumentConfig{
 					Description: "New project endtime",
-					Type:        graphql.NewNonNull(graphql.Int),
+					Type:        graphql.Int,
 				},
 				"liveat": &graphql.ArgumentConfig{
-					Description: "New project liveat URL",
-					Type:        graphql.NewNonNull(graphql.String),
+					Description:	"New project liveat URL",
+					Type:		graphql.String,
 				},
 				"githuburl": &graphql.ArgumentConfig{
-					Description: "New project githuburl",
-					Type:        graphql.NewNonNull(graphql.String),
+					Description:	"New project githuburl",
+					Type:		graphql.String,
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				project := &Project{
-					ID: p.Args["id"].(int),
-					Name: p.Args["name"].(string),
-					ShortDescription: p.Args["shortdescription"].(string),
-					Description: p.Args["description"].(string),
-					ContactEmail: p.Args["contactemail"].(string),
-					Picture: p.Args["picture"].(string),
-					Ongoing: p.Args["ongoing"].(bool),
-					StartTime: p.Args["starttime"].(int),
-					EndTime: p.Args["endtime"].(int),
-					LiveAt: p.Args["liveat"].(string),
-					GithubURL: p.Args["githuburl"].(string),
+				project := Project{}
+				for field, value := range p.Args {
+					if value != "" {
+						if field == "id" {
+							project.ID = value.(int)
+						}
+						if field == "name" {
+							project.Name = value.(string)
+						}
+						if field == "shortdescription" {
+							project.ShortDescription = value.(string)
+						}
+						if field == "description" {
+							project.Description = value.(string)
+						}
+						if field == "contactemail" {
+							project.ContactEmail = value.(string)
+						}
+						if field == "picture" {
+							project.Picture = value.(string)
+						}
+						if field == "ongoing" {
+							project.Ongoing = value.(bool)
+						}
+						if field == "starttime" {
+							project.StartTime = value.(int)
+						}
+						if field == "endtime" {
+							project.EndTime = value.(int)
+						}
+						if field == "liveat" {
+							project.LiveAt = value.(string)
+						}
+						if field == "githuburl" {
+							project.GithubURL = value.(string)
+						}
+					}
+
 				}
-				err := UpdateProject(project)
+				err := UpdateProject(&project)
 				return (err == nil), err
 			},
 		},

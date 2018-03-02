@@ -1,5 +1,7 @@
 package modules
 
+import "reflect"
+
 type Project struct {
 	ID			int
 	Name			string
@@ -43,10 +45,34 @@ func RemoveProjectByID(id int) error {
 }
 
 func UpdateProject(project *Project) error {
-	_, err := db.Exec(`UPDATE project SET name=$1, shortdescription=$2, description=$3, contactemail=$4,
-			   picture=$5, ongoing=$6, starttime=$7, endtime=$8, liveat=$9, githuburl=$10 WHERE id=$11`, project.Name,
-			   project.ShortDescription, project.Description, project.ContactEmail, project.Picture,
-			   project.Ongoing, project.StartTime, project.EndTime, project.LiveAt, project.GithubURL, project.ID)
+	old_project := Project{}
+	err := db.QueryRowx(`SELECT * FROM project WHERE project.id = $1`, project.ID).StructScan(&old_project)
+	if err != nil{
+		return err
+	}
+
+	old_values := reflect.ValueOf(&old_project).Elem()
+	new_values := reflect.ValueOf(project).Elem()
+
+	for i := 0; i < new_values.NumField(); i++ {
+		field := new_values.Field(i)
+		if field.Interface() == "" || field.Interface() == nil || field.Interface() == 0 {
+			if field.CanSet() {
+				if field.Type().Kind() == reflect.String {
+					new_val, _ := old_values.Field(i).Interface().(string)
+					field.SetString(new_val)
+				} else if field.Type().Kind() == reflect.Int {
+					new_val := old_values.Field(i).Interface().(int)
+					field.SetInt(int64(new_val))
+				}
+			}
+		}
+	}
+
+	_, err = db.Exec(`UPDATE project SET name=$1, shortdescription=$2, description=$3, contactemail=$4,
+			  picture=$5, ongoing=$6, starttime=$7, endtime=$8, liveat=$9, githuburl=$10 WHERE id=$11`, project.Name,
+			  project.ShortDescription, project.Description, project.ContactEmail, project.Picture,
+			  project.Ongoing, project.StartTime, project.EndTime, project.LiveAt, project.GithubURL, project.ID)
 	return err
 }
 
