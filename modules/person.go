@@ -44,6 +44,26 @@ func RemovePersonByID(id int) error {
 	return err
 }
 
+func UpdatePerson(person *Person) error {
+	old_person := Person{}
+	err := db.QueryRowx(`SELECT * FROM person WHERE person.id = $1`, person.ID).StructScan(&old_person)
+	if err != nil {
+		return err
+	}
+
+	err = AggregateStructs(person, &old_person)
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec(`UPDATE person SET name=$1, email=$2, title=$3, description=$4, location=$5, picture=$6, githuburl=$7,
+			  linkedinurl=$8, startdate=$9 WHERE id=$10`, person.Name, person.Email, person.Title,
+			  person.Description, person.Location, person.Picture, person.GithubURL, person.LinkedInURL,
+			  person.StartDate, person.ID)
+
+	return err
+}
+
 func HasSkill(person_id, skill_id int) error {
 	_, err := db.Exec(`INSERT INTO hasskill (person_id, skill_id) VALUES ($1, $2)`, person_id, skill_id)
 	return err
