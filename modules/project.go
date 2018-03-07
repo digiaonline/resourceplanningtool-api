@@ -1,7 +1,5 @@
 package modules
 
-import "reflect"
-
 type Project struct {
 	ID			int
 	Name			string
@@ -51,22 +49,9 @@ func UpdateProject(project *Project) error {
 		return err
 	}
 
-	old_values := reflect.ValueOf(&old_project).Elem()
-	new_values := reflect.ValueOf(project).Elem()
-
-	for i := 0; i < new_values.NumField(); i++ {
-		field := new_values.Field(i)
-		if field.Interface() == "" || field.Interface() == nil || field.Interface() == 0 {
-			if field.CanSet() {
-				if field.Type().Kind() == reflect.String {
-					new_val, _ := old_values.Field(i).Interface().(string)
-					field.SetString(new_val)
-				} else if field.Type().Kind() == reflect.Int {
-					new_val := old_values.Field(i).Interface().(int)
-					field.SetInt(int64(new_val))
-				}
-			}
-		}
+	err = AggregateStructs(project, &old_project)
+	if err != nil {
+		return err
 	}
 
 	_, err = db.Exec(`UPDATE project SET name=$1, shortdescription=$2, description=$3, contactemail=$4,
