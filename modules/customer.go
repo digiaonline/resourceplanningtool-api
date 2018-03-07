@@ -1,5 +1,7 @@
 package modules
 
+import "reflect"
+
 type Customer struct {
 	ID		int
 	Name		string
@@ -32,6 +34,37 @@ func GetCustomerByID(id int) (*Customer, error) {
 
 func RemoveCustomerByID(id int) error {
 	_, err := db.Exec(`DELETE FROM customer WHERE id=$1`, id)
+	return err
+}
+
+func UpdateCustomer(customer *Customer) error {
+	old_customer := Customer{}
+	err := db.QueryRowx(`SELECT * FROM customer WHERE customer.id = $1`, customer.ID).StructScan(&old_customer)
+	if err != nil {
+		return err
+	}
+
+	old_values := reflect.ValueOf(&old_customer).Elem()
+	new_values := reflect.ValueOf(customer).Elem()
+
+	for i := 0; i < new_values.NumField(); i++ {
+		field := new_values.Field(i)
+		if field.Interface() == "" || field.Interface() == nil || field.Interface() == 0 {
+			if field.CanSet() {
+				if field.Type().Kind() == reflect.String {
+					new_val, _ := old_values.Field(i).Interface().(string)
+					field.SetString(new_val)
+				} else if field.Type().Kind() == reflect.Int {
+					new_val := old_values.Field(i).Interface().(int)
+					field.SetInt(int64(new_val))
+				}
+			}
+		}
+	}
+
+	_, err = db.Exec(`UPDATE customer SET name=$1, url=$2, industry=$3, logo=$4 WHERE id=$5`, customer.Name,
+			  customer.URL, customer.Industry, customer.Logo, customer.ID)
+
 	return err
 }
 
