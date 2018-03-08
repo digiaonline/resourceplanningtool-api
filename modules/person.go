@@ -64,12 +64,12 @@ func UpdatePerson(person *Person) error {
 	return err
 }
 
-func HasSkill(person_id, skill_id int) error {
+func AddSkill(person_id, skill_id int) error {
 	_, err := db.Exec(`INSERT INTO hasskill (person_id, skill_id) VALUES ($1, $2)`, person_id, skill_id)
 	return err
 }
 
-func RemoveHasSkillByID(id int) error {
+func RemovePersonsSkillByID(id int) error {
 	_, err := db.Exec(`DELETE FROM hasskill WHERE id=$1`, id)
 	return err
 }
