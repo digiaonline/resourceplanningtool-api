@@ -180,6 +180,25 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				return (err == nil), err
 			},
 		},
+		"addProjectToCustomer": &graphql.Field{
+			Type: graphql.Boolean,
+			Args: graphql.FieldConfigArgument{
+				"customer_id": &graphql.ArgumentConfig{
+					Description: "Customer ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+				"project_id": &graphql.ArgumentConfig{
+					Description: "Project ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				customer_id := p.Args["customer_id"].(int)
+				project_id := p.Args["project_id"].(int)
+				err := AddProjectToCustomer(customer_id, project_id)
+				return (err == nil), err
+			},
+		},
 		"createCustomer": &graphql.Field{
 			Type: CustomerType,
 			Args: graphql.FieldConfigArgument{
