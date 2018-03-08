@@ -199,6 +199,20 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				return (err == nil), err
 			},
 		},
+		"removeProjectFromCustomer": &graphql.Field{
+			Type: graphql.Boolean,
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Description: "ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				id := p.Args["id"].(int)
+				err := RemoveProjectFromCustomer(id)
+				return (err == nil), err
+			},
+		},
 		"createCustomer": &graphql.Field{
 			Type: CustomerType,
 			Args: graphql.FieldConfigArgument{
