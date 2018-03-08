@@ -58,6 +58,11 @@ func AddProjectToCustomer(customer_id, project_id int) error {
 	return err
 }
 
+func RemoveProjectFromCustomer(id int) error {
+	_, err := db.Exec(`DELETE FROM projectscustomer WHERE id=$1`,id)
+	return err
+}
+
 func GetProjectsOfCustomerByID(id int) ([]*Project, error) {
 	rows, err := db.Queryx(`SELECT proj.*
 			        FROM project AS proj, projectscustomer AS pc
