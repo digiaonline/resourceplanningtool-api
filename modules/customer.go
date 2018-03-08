@@ -53,6 +53,11 @@ func UpdateCustomer(customer *Customer) error {
 	return err
 }
 
+func AddProjectToCustomer(customer_id, project_id int) error {
+	_, err := db.Exec(`INSERT INTO projectscustomer (project_id, customer_id) VALUES ($1, $2)`, project_id, customer_id)
+	return err
+}
+
 func GetProjectsOfCustomerByID(id int) ([]*Project, error) {
 	rows, err := db.Queryx(`SELECT proj.*
 			        FROM project AS proj, projectscustomer AS pc
