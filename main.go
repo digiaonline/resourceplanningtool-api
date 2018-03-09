@@ -2,8 +2,6 @@ package main
 
 import (
 	"resourceplanningtool-api/modules"
-	"encoding/json"
-	"io/ioutil"
 	"log"
 	"fmt"
 	"os"
@@ -12,30 +10,9 @@ import (
 	"github.com/rs/cors"
 	"github.com/joho/godotenv"
 	"github.com/graphql-go/graphql"
+	"github.com/graphql-go/handler"
 	_ "github.com/lib/pq"
 )
-
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-}
-
-func handler(schema graphql.Schema) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		query, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		result := graphql.Do(graphql.Params{
-			Schema:		schema,
-			RequestString:	string(query),
-		})
-		enableCors(&w)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(result)
-	}
-}
 
 func main() {
 	err := godotenv.Load()
@@ -52,12 +29,23 @@ func main() {
 		log.Fatal(err)
 	}
 
+	h := handler.New(&handler.Config{
+		Schema:		&schema,
+		Pretty:		true,
+		GraphiQL:	true,
+	})
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:	[]string{"*"},
+		AllowedMethods:	[]string{"GET", "POST"},
+	})
+
+	mh := c.Handler(h)
+
 	var dbinfo string
 	dbinfo = fmt.Sprintf("postgres://%s:%s@%s", os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_ADDRESS"))
 	modules.InitDB("postgres", dbinfo)
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/skillz", handler(schema))
-	handler := cors.Default().Handler(mux)
-	log.Fatal(http.ListenAndServe(":3002", handler))
+	http.Handle("/skillz", mh)
+	http.ListenAndServe(":3002", nil)
 }
