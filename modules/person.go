@@ -69,8 +69,8 @@ func AddSkill(person_id, skill_id int) error {
 	return err
 }
 
-func RemovePersonsSkillByID(id int) error {
-	_, err := db.Exec(`DELETE FROM hasskill WHERE id=$1`, id)
+func RemovePersonsSkillByID(person_id, skill_id int) error {
+	_, err := db.Exec(`DELETE FROM hasskill WHERE person_id=$1 AND skill_id=$2`, person_id, skill_id)
 	return err
 }
 

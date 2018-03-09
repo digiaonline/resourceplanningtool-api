@@ -490,14 +490,19 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 		"removeSkillForPerson": &graphql.Field{
 			Type: graphql.Boolean,
 			Args: graphql.FieldConfigArgument{
-				"id": &graphql.ArgumentConfig{
-					Description: "ID",
+				"person_id": &graphql.ArgumentConfig{
+					Description: "Person ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+				"skill_id": &graphql.ArgumentConfig{
+					Description: "Skill ID",
 					Type:        graphql.NewNonNull(graphql.Int),
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				id := p.Args["id"].(int)
-				err := RemovePersonsSkillByID(id)
+				person_id := p.Args["person_id"].(int)
+				skill_id := p.Args["skill_id"].(int)
+				err := RemovePersonsSkillByID(person_id, skill_id)
 				return (err == nil), err
 			},
 		},
