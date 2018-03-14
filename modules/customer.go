@@ -58,8 +58,8 @@ func AddProjectToCustomer(customer_id, project_id int) error {
 	return err
 }
 
-func RemoveProjectFromCustomer(id int) error {
-	_, err := db.Exec(`DELETE FROM projectscustomer WHERE id=$1`,id)
+func RemoveProjectFromCustomer(project_id, customer_id int) error {
+	_, err := db.Exec(`DELETE FROM projectscustomer WHERE project_id=$1 AND customer_id=$2`, project_id, customer_id)
 	return err
 }
 
