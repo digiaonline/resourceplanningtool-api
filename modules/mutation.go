@@ -202,14 +202,19 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 		"removeProjectFromCustomer": &graphql.Field{
 			Type: graphql.Boolean,
 			Args: graphql.FieldConfigArgument{
-				"id": &graphql.ArgumentConfig{
-					Description: "ID",
+				"project_id": &graphql.ArgumentConfig{
+					Description: "Project ID",
+					Type:        graphql.NewNonNull(graphql.Int),
+				},
+				"customer_id": &graphql.ArgumentConfig{
+					Description: "Customer ID",
 					Type:        graphql.NewNonNull(graphql.Int),
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				id := p.Args["id"].(int)
-				err := RemoveProjectFromCustomer(id)
+				project_id := p.Args["project_id"].(int)
+				customer_id := p.Args["customer_id"].(int)
+				err := RemoveProjectFromCustomer(project_id, customer_id)
 				return (err == nil), err
 			},
 		},
