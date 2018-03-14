@@ -77,7 +77,7 @@ func AddTechnologyToProject(project_id, technology_id int) error {
 }
 
 func RemoveTechnologyFromProject(project_id, technology_id int) error {
-	_, err := db.Exec(`DELETE FROM usestechnology WHERE project_id=$1 AND person_id=$2`, project_id, technology_id)
+	_, err := db.Exec(`DELETE FROM usestechnology WHERE project_id=$1 AND technology_id=$2`, project_id, technology_id)
 	return err
 }
 
