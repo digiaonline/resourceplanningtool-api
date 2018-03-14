@@ -26,7 +26,7 @@ var NewsType = graphql.NewObject(graphql.ObjectConfig{
 			},
 		},
 		"description": &graphql.Field{
-			Type: graphql.NewNonNull(graphql.Int),
+			Type: graphql.NewNonNull(graphql.String),
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				if news, ok := p.Source.(*News); ok == true {
 					return news.Description, nil
