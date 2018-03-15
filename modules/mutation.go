@@ -457,6 +457,9 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 						if field == "location" {
 							person.Location = value.(string)
 						}
+						if field == "picture" {
+							person.Picture = value.(string)
+						}
 						if field == "githuburl" {
 							person.GithubURL = value.(string)
 						}
