@@ -43,8 +43,8 @@ func main() {
 	mh := c.Handler(h)
 
 	var dbinfo string
-	dbinfo = fmt.Sprintf("postgres://%s:%s@%s", os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_ADDRESS"))
-	modules.InitDB("postgres", dbinfo)
+	dbinfo = fmt.Sprintf("user=%s password=%s host=%s dbname=%s sslmode=%s", os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_ADDRESS"), os.Getenv("DB_NAME"), os.Getenv("SSL_MODE"))
+	modules.InitDB(os.Getenv("DB_TYPE"), dbinfo)
 
 	http.Handle("/skillz", mh)
 	http.ListenAndServe(":3002", nil)
