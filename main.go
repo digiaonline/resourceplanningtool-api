@@ -46,6 +46,8 @@ func main() {
 	dbinfo = fmt.Sprintf("user=%s password=%s host=%s dbname=%s sslmode=%s", os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_ADDRESS"), os.Getenv("DB_NAME"), os.Getenv("SSL_MODE"))
 	modules.InitDB(os.Getenv("DB_TYPE"), dbinfo)
 
-	http.Handle("/skillz", mh)
-	http.ListenAndServe(":3002", nil)
+	handler := fmt.Sprintf("/%s", os.Getenv("HTTP_PATH"))
+	http.Handle(handler, mh)
+	port := fmt.Sprintf(":%s", os.Getenv("LISTEN_PORT"))
+	http.ListenAndServe(port, nil)
 }
