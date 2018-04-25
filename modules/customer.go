@@ -36,18 +36,7 @@ func RemoveCustomerByID(id int) error {
 }
 
 func UpdateCustomer(customer *Customer) error {
-	old_customer := Customer{}
-	err := db.QueryRowx(`SELECT * FROM customer WHERE customer.id = $1`, customer.ID).StructScan(&old_customer)
-	if err != nil {
-		return err
-	}
-
-	err = AggregateStructs(customer, &old_customer)
-	if err != nil {
-		return err
-	}
-
-	_, err = db.Exec(`UPDATE customer SET name=$1, url=$2, industry=$3, logo=$4 WHERE id=$5`, customer.Name,
+	_, err := db.Exec(`UPDATE customer SET name=$1, url=$2, industry=$3, logo=$4 WHERE id=$5`, customer.Name,
 			  customer.URL, customer.Industry, customer.Logo, customer.ID)
 
 	return err

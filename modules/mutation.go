@@ -201,7 +201,7 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"url": &graphql.ArgumentConfig{
 					Description: "New customer URL",
-					Type:        graphql.NewNonNull(graphql.String),
+					Type:        graphql.String,
 				},
 				"industry": &graphql.ArgumentConfig{
 					Description: "New customer industry",
@@ -209,7 +209,7 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"logo": &graphql.ArgumentConfig{
 					Description: "New customer logo",
-					Type:        graphql.NewNonNull(graphql.String),
+					Type:        graphql.String,
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
@@ -254,7 +254,7 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"url": &graphql.ArgumentConfig{
 					Description:	"Customer url",
-					Type:		graphql.NewNonNull(graphql.String),
+					Type:		graphql.String,
 				},
 				"industry": &graphql.ArgumentConfig{
 					Description:	"Customer industry",
@@ -262,7 +262,7 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"logo": &graphql.ArgumentConfig{
 					Description:	"Customer logo",
-					Type:		graphql.NewNonNull(graphql.String),
+					Type:		graphql.String,
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
