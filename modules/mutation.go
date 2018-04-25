@@ -22,7 +22,7 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"description": &graphql.ArgumentConfig{
 					Description: "New project description",
-					Type:        graphql.NewNonNull(graphql.String),
+					Type:        graphql.String,
 				},
 				"contactemail": &graphql.ArgumentConfig{
 					Description: "New project description",
@@ -30,7 +30,7 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"picture": &graphql.ArgumentConfig{
 					Description: "New project picture",
-					Type:        graphql.NewNonNull(graphql.String),
+					Type:        graphql.String,
 				},
 				"ongoing": &graphql.ArgumentConfig{
 					Description: "New project ongoing",
@@ -42,15 +42,15 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"endtime": &graphql.ArgumentConfig{
 					Description: "New project endtime",
-					Type:        graphql.NewNonNull(graphql.Int),
+					Type:        graphql.Int,
 				},
 				"liveat": &graphql.ArgumentConfig{
 					Description: "New project liveat URL",
-					Type:        graphql.NewNonNull(graphql.String),
+					Type:        graphql.String,
 				},
 				"githuburl": &graphql.ArgumentConfig{
 					Description: "New project githuburl",
-					Type:        graphql.NewNonNull(graphql.String),
+					Type:        graphql.String,
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
@@ -105,7 +105,7 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"description": &graphql.ArgumentConfig{
 					Description:	"New project description",
-					Type:		graphql.NewNonNull(graphql.String),
+					Type:		graphql.String,
 				},
 				"contactemail": &graphql.ArgumentConfig{
 					Description:	"New project description",
@@ -113,7 +113,7 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"picture": &graphql.ArgumentConfig{
 					Description:	"New project picture",
-					Type:		graphql.NewNonNull(graphql.String),
+					Type:		graphql.String,
 				},
 				"ongoing": &graphql.ArgumentConfig{
 					Description:	"New project ongoing",
@@ -125,15 +125,15 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"endtime": &graphql.ArgumentConfig{
 					Description: "New project endtime",
-					Type:		graphql.NewNonNull(graphql.Int),
+					Type:		graphql.Int,
 				},
 				"liveat": &graphql.ArgumentConfig{
 					Description:	"New project liveat URL",
-					Type:		graphql.NewNonNull(graphql.String),
+					Type:		graphql.String,
 				},
 				"githuburl": &graphql.ArgumentConfig{
 					Description:	"New project githuburl",
-					Type:		graphql.NewNonNull(graphql.String),
+					Type:		graphql.String,
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {

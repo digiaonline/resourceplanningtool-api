@@ -43,18 +43,7 @@ func RemoveProjectByID(id int) error {
 }
 
 func UpdateProject(project *Project) error {
-	old_project := Project{}
-	err := db.QueryRowx(`SELECT * FROM project WHERE project.id = $1`, project.ID).StructScan(&old_project)
-	if err != nil{
-		return err
-	}
-
-	err = AggregateStructs(project, &old_project)
-	if err != nil {
-		return err
-	}
-
-	_, err = db.Exec(`UPDATE project SET name=$1, shortdescription=$2, description=$3, contactemail=$4,
+	_, err := db.Exec(`UPDATE project SET name=$1, shortdescription=$2, description=$3, contactemail=$4,
 			  picture=$5, ongoing=$6, starttime=$7, endtime=$8, liveat=$9, githuburl=$10 WHERE id=$11`, project.Name,
 			  project.ShortDescription, project.Description, project.ContactEmail, project.Picture,
 			  project.Ongoing, project.StartTime, project.EndTime, project.LiveAt, project.GithubURL, project.ID)
