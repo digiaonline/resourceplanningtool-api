@@ -397,6 +397,7 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				person := &Person{
+					ID: p.Args["id"].(int),
 					Name: p.Args["name"].(string),
 					Email: p.Args["email"].(string),
 					Title: p.Args["title"].(string),
