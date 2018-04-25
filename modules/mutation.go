@@ -246,48 +246,34 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 			Args: graphql.FieldConfigArgument{
 				"id": &graphql.ArgumentConfig{
 					Description: "Customer ID",
-					Type:        graphql.NewNonNull(graphql.Int),
+					Type:		graphql.NewNonNull(graphql.Int),
 				},
 				"name": &graphql.ArgumentConfig{
 					Description:	"Customer name",
-					Type:		graphql.String,
+					Type:		graphql.NewNonNull(graphql.String),
 				},
 				"url": &graphql.ArgumentConfig{
 					Description:	"Customer url",
-					Type:		graphql.String,
+					Type:		graphql.NewNonNull(graphql.String),
 				},
 				"industry": &graphql.ArgumentConfig{
 					Description:	"Customer industry",
-					Type:		graphql.String,
+					Type:		graphql.NewNonNull(graphql.String),
 				},
 				"logo": &graphql.ArgumentConfig{
 					Description:	"Customer logo",
-					Type:		graphql.String,
+					Type:		graphql.NewNonNull(graphql.String),
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				customer := Customer{}
-				for field, value := range p.Args {
-					if value != "" {
-						if field == "id" {
-							customer.ID = value.(int)
-						}
-						if field == "name" {
-							customer.Name = value.(string)
-						}
-						if field == "url" {
-							customer.URL = value.(string)
-						}
-						if field == "industry" {
-							customer.Industry = value.(string)
-						}
-						if field == "logo" {
-							customer.Logo = value.(string)
-						}
-					}
-
+				customer := &Customer{
+					ID: p.Args["id"].(int),
+					Name: p.Args["name"].(string),
+					URL: p.Args["url"].(string),
+					Industry: p.Args["industry"].(string),
+					Logo: p.Args["logo"].(string),
 				}
-				err := UpdateCustomer(&customer)
+				err := UpdateCustomer(customer)
 				return (err == nil), err
 			},
 		},
