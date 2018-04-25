@@ -302,15 +302,15 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"picture": &graphql.ArgumentConfig{
 					Description: "New person picture",
-					Type:        graphql.NewNonNull(graphql.String),
+					Type:        graphql.String,
 				},
 				"githuburl": &graphql.ArgumentConfig{
 					Description: "New person GithubURL",
-					Type:        graphql.NewNonNull(graphql.String),
+					Type:        graphql.String,
 				},
 				"linkedinurl": &graphql.ArgumentConfig{
 					Description: "New person LinkedInURL",
-					Type:        graphql.NewNonNull(graphql.String),
+					Type:        graphql.String,
 				},
 				"startdate": &graphql.ArgumentConfig{
 					Description: "New person startdate",
@@ -380,15 +380,15 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"picture": &graphql.ArgumentConfig{
 					Description:	"Person picture",
-					Type:		graphql.NewNonNull(graphql.String),
+					Type:		graphql.String,
 				},
 				"githuburl": &graphql.ArgumentConfig{
 					Description:	"Github url",
-					Type:		graphql.NewNonNull(graphql.String),
+					Type:		graphql.String,
 				},
 				"linkedinurl": &graphql.ArgumentConfig{
 					Description:	"LinkedIn url",
-					Type:		graphql.NewNonNull(graphql.String),
+					Type:		graphql.String,
 				},
 				"startdate": &graphql.ArgumentConfig{
 					Description:	"Person start date",
