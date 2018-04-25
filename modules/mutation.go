@@ -360,79 +360,54 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				},
 				"name": &graphql.ArgumentConfig{
 					Description:	"Customer name",
-					Type:		graphql.String,
+					Type:		graphql.NewNonNull(graphql.String),
 				},
 				"email": &graphql.ArgumentConfig{
 					Description:	"Person email",
-					Type:		graphql.String,
+					Type:		graphql.NewNonNull(graphql.String),
 				},
 				"title": &graphql.ArgumentConfig{
 					Description:	"Person title",
-					Type:		graphql.String,
+					Type:		graphql.NewNonNull(graphql.String),
 				},
 				"description": &graphql.ArgumentConfig{
 					Description:	"Person description",
-					Type:		graphql.String,
+					Type:		graphql.NewNonNull(graphql.String),
 				},
 				"location": &graphql.ArgumentConfig{
 					Description:	"Person location",
-					Type:		graphql.String,
+					Type:		graphql.NewNonNull(graphql.String),
 				},
 				"picture": &graphql.ArgumentConfig{
 					Description:	"Person picture",
-					Type:		graphql.String,
+					Type:		graphql.NewNonNull(graphql.String),
 				},
 				"githuburl": &graphql.ArgumentConfig{
 					Description:	"Github url",
-					Type:		graphql.String,
+					Type:		graphql.NewNonNull(graphql.String),
 				},
 				"linkedinurl": &graphql.ArgumentConfig{
 					Description:	"LinkedIn url",
-					Type:		graphql.String,
+					Type:		graphql.NewNonNull(graphql.String),
 				},
 				"startdate": &graphql.ArgumentConfig{
 					Description:	"Person start date",
-					Type:		graphql.Int,
+					Type:		graphql.NewNonNull(graphql.Int),
 				},
 			},
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				person := Person{}
-				for field, value := range p.Args {
-					if value != "" {
-						if field == "id" {
-							person.ID = value.(int)
-						}
-						if field == "name" {
-							person.Name = value.(string)
-						}
-						if field == "email" {
-							person.Email = value.(string)
-						}
-						if field == "title" {
-							person.Title = value.(string)
-						}
-						if field == "description" {
-							person.Description = value.(string)
-						}
-						if field == "location" {
-							person.Location = value.(string)
-						}
-						if field == "picture" {
-							person.Picture = value.(string)
-						}
-						if field == "githuburl" {
-							person.GithubURL = value.(string)
-						}
-						if field == "linkedinurl" {
-							person.LinkedInURL = value.(string)
-						}
-						if field == "startdate" {
-							person.StartDate = value.(int)
-						}
-					}
-
+				person := &Person{
+					Name: p.Args["name"].(string),
+					Email: p.Args["email"].(string),
+					Title: p.Args["title"].(string),
+					Description: p.Args["description"].(string),
+					Location: p.Args["location"].(string),
+					Picture: p.Args["picture"].(string),
+					GithubURL: p.Args["githuburl"].(string),
+					LinkedInURL: p.Args["linkedinurl"].(string),
+					StartDate: p.Args["startdate"].(int),
 				}
-				err := UpdatePerson(&person)
+				err := UpdatePerson(person)
 				return (err == nil), err
 			},
 		},
